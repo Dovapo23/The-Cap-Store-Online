@@ -844,7 +844,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
       }
       resetSession();
       return {
-        text: '¡Hola! 👋 Soy el asistente de CapsStore. ¿En qué te puedo ayudar?',
+        text: '¡Hola! 👋 Soy el asistente de The Cap Store Online. ¿En qué te puedo ayudar?',
         qr: ['Ver colecciones', 'Precios', '¿Cómo comprar?', 'Contacto WhatsApp'],
       };
     }
@@ -977,7 +977,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
       hasShown = true;
       resetInactivityTimer();
       botReply(
-        '¡Hola! 👋 Soy el asistente de CapsStore. Puedo ayudarte a ver nuestros productos y tomar tu pedido.',
+        '¡Hola! 👋 Soy el asistente de The Cap Store Online. Puedo ayudarte a ver nuestros productos y tomar tu pedido.',
         ['Ver colecciones', 'Precios', '¿Cómo comprar?', 'Contacto WhatsApp'],
         600
       );

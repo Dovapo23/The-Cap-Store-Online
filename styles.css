@@ -184,7 +184,11 @@ input, textarea { font-family: inherit; }
   flex-shrink: 0;
 }
 .logo__icon { font-size: 1.6rem; }
-.logo__accent { color: var(--color-accent); }
+.logo__white { color: #ffffff; }
+.logo__accent {
+  color: var(--color-accent);
+  text-shadow: 0 0 12px rgba(245,166,35,0.45);
+}
 
 /* Nav */
 .nav__list {
@@ -350,12 +354,30 @@ input, textarea { font-family: inherit; }
   animation: fadeInUp 0.8s 0.1s ease both;
 }
 .hero__badge--cta {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 900;
   color: var(--color-accent);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-shadow: 0 0 16px rgba(245,166,35,0.5);
+}
+.hero__badge--note {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  margin-top: 0.6rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-style: normal;
+}
+.hero__badge--note span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
 }
 
 .hero__chat-cta {

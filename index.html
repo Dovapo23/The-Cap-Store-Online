@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CapStore - Tu Tienda de Gorras Online</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#" class="logo">
+        <span class="logo__icon">🧢</span>
+        <span class="logo__text">Cap<span class="logo__accent">Store</span></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="#inicio" class="nav__link">Inicio</a></li>
+          <li><a href="#tienda" class="nav__link">Tienda</a></li>
+          <li><a href="#categorias" class="nav__link">Colecciones</a></li>
+          <li><a href="#nosotros" class="nav__link">Nosotros</a></li>
+          <li><a href="#contacto" class="nav__link">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="inicio">
+    <div class="hero__bg"></div>
+    <div class="container hero__content">
+      <p class="hero__badge">Escoge, pídela por nuestro chat y la <strong class="hero__badge--cta">¡PAGAS CONTRA ENTREGA!</strong></p>
+      <button class="hero__chat-cta" id="heroChatBtn" aria-label="Abrir chat de pedidos">
+        💬 Haz tu pedido aquí
+      </button>
+      <h1 class="hero__title">
+        Lleva tu estilo<br />
+        <span class="hero__title--accent">al siguiente nivel</span>
+      </h1>
+      <p class="hero__subtitle">
+        Gorras premium para cada estilo de vida. Diseños únicos, materiales de calidad y envío a todo el país.
+      </p>
+      <div class="hero__cta">
+        <a href="#tienda" class="btn btn--primary">Ver Colección</a>
+        <a href="#nosotros" class="btn btn--outline">Conoce más</a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <strong>3</strong>
+          <span>Colecciones</span>
+        </div>
+        <div class="hero__stat">
+          <strong>+10K</strong>
+          <span>Clientes</span>
+        </div>
+        <div class="hero__stat">
+          <strong>Calidad</strong>
+          <span>1.1</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="hero__cap-display">
+        <div class="cap-mosaic">
+          <img src="images/luxury/productImage-1773340966310.jpeg" alt="NY Yankees 1999 World Series" loading="eager" />
+          <img src="images/luxury/productImage-1773341479639.jpeg" alt="Dodgers Roja World Series" loading="eager" />
+          <img src="images/luxury/productImage-1773342134184.jpeg" alt="Oakland A's World Series" loading="eager" />
+          <img src="images/luxury/productImage-1773340975511.jpeg" alt="Dodgers Negra Los Angeles" loading="eager" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BANNER ===== -->
+  <div class="promo-banner">
+    <div class="promo-banner__track">
+      <span>🔥 Envío gratis en compras mayores a $500.000</span>
+      <span>⚡ Nueva colección Agropecuario 2026 disponible</span>
+      <span>🎁 10% de descuento en tu primera compra</span>
+      <span>⭐ Beisboleras Edicion Especial — Ediciones limitadas</span>
+      <span>🇨🇴 República de Colombia — Orgullo nacional</span>
+      <span>🔥 Envío gratis en compras mayores a $500.000</span>
+      <span>⚡ Nueva colección Agropecuario 2026 disponible</span>
+      <span>🎁 10% de descuento en tu primera compra</span>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCTS ===== -->
+  <section class="section products" id="tienda">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__tag">Productos destacados</p>
+        <h2 class="section__title">Nuestra Colección</h2>
+        <p class="section__subtitle">Tres colecciones exclusivas, crafteadas con los mejores materiales y diseños únicos.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="all">Todos</button>
+        <button class="filter-tab" data-filter="agropecuario">100% Agropecuario</button>
+        <button class="filter-tab" data-filter="luxury">Beisboleras Edicion Especial</button>
+        <button class="filter-tab" data-filter="colombia">República de Colombia</button>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="products__grid" id="productsGrid">
+
+        <!-- ===== COLECCIÓN AGROPECUARIO ===== -->
+        <article class="product-card" data-category="agropecuario" data-id="1">
+          <div class="product-card__img">
+            <span class="product-card__badge">Popular</span>
+            <img src="images/agropecuario/productImage-1772732844082.jpeg" alt="Agropecuario Negro Clásico" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="1">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Negro Clásico</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="1" data-name="Agropecuario Negro Clásico" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="2">
+          <div class="product-card__img">
+            <img src="images/agropecuario/productImage-1772732844717.jpeg" alt="Agropecuario Gris" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="2">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Gris Bandera</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="2" data-name="Agropecuario Gris Bandera" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="3">
+          <div class="product-card__img">
+            <span class="product-card__badge product-card__badge--new">Nuevo</span>
+            <img src="images/agropecuario/productImage-1772732845342.jpeg" alt="Agropecuario Camel Suede" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="3">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Camel Suede</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="3" data-name="Agropecuario Camel Suede" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="4">
+          <div class="product-card__img">
+            <span class="product-card__badge product-card__badge--new">Nuevo</span>
+            <img src="images/agropecuario/productImage-1772733199794.jpeg" alt="Agropecuario Negro Neon Rojo" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="4">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Negro Neon Rojo</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="4" data-name="Agropecuario Negro Neon Rojo" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="5">
+          <div class="product-card__img">
+            <img src="images/agropecuario/productImage-1772733200407.jpeg" alt="Agropecuario Rosa Suede" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="5">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Rosa Suede</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="5" data-name="Agropecuario Rosa Suede" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="6">
+          <div class="product-card__img">
+            <img src="images/agropecuario/productImage-1772733201034.jpeg" alt="Agropecuario Borgoña y Negro" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="6">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Borgoña y Negro</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="6" data-name="Agropecuario Borgoña y Negro" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="agropecuario" data-id="7">
+          <div class="product-card__img">
+            <span class="product-card__badge">Popular</span>
+            <img src="images/agropecuario/productImage-1772733201696.jpeg" alt="Agropecuario Negro Total Suede" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="7">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">100% Agropecuario</p>
+            <h3 class="product-card__name">Agropecuario Negro Total Suede</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="7" data-name="Agropecuario Negro Total Suede" data-price="75000" data-category="agropecuario">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== COLECCIÓN BEISBOLERAS EDICIÓN ESPECIAL ===== -->
+        <article class="product-card" data-category="luxury" data-id="8">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773340964403.jpeg" alt="Anaheim Ducks 30th Anniversary" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="8">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Anaheim Ducks 30th Anniversary</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="8" data-name="Anaheim Ducks 30th Anniversary" data-price="70000" data-category="luxury">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="9">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340965053.jpeg" alt="LA Dodgers 60th Anniversary" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="9">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">LA Dodgers 60th Anniversary</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="9" data-name="LA Dodgers 60th Anniversary" data-price="70000" data-category="luxury">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="10">
+          <div class="product-card__img">
+            <span class="product-card__badge product-card__badge--new">Nuevo</span>
+            <img src="images/luxury/productImage-1773340965738.jpeg" alt="LA Dodgers Roses Edition" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="10">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">LA Dodgers Roses Edition</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="10" data-name="LA Dodgers Roses Edition" data-price="70000" data-category="luxury">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="11">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340966310.jpeg" alt="NY Yankees 1999 World Series" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="11">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">NY Yankees 1999 World Series</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="11" data-name="NY Yankees 1999 World Series" data-price="70000" data-category="luxury">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="40">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340967005.jpeg" alt="Mets Crema Verde" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="40">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Mets Crema Verde</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="40" data-name="Mets Crema Verde" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="41">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340967667.jpeg" alt="Yankees Negra Llamas" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="41">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Negra Llamas</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="41" data-name="Yankees Negra Llamas" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="42">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340968905.jpeg" alt="Yankees Azul Celeste" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="42">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Azul Celeste</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="42" data-name="Yankees Azul Celeste" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="43">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340969497.jpeg" alt="Red Sox Negra Rosas" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="43">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Red Sox Negra Rosas</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="43" data-name="Red Sox Negra Rosas" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="44">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340970303.jpeg" alt="White Sox Camel" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="44">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">White Sox Camel</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="44" data-name="White Sox Camel" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="45">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340970934.jpeg" alt="Yankees Negra Clásica" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="45">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Negra Clásica</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="45" data-name="Yankees Negra Clásica" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="46">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340971595.jpeg" alt="Mighty Ducks Crema" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="46">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Mighty Ducks Crema</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="46" data-name="Mighty Ducks Crema" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="47">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340972309.jpeg" alt="Yankees Gris New York" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="47">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Gris New York</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="47" data-name="Yankees Gris New York" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="48">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340972975.jpeg" alt="Giants Camel" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="48">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Giants Camel</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="48" data-name="Giants Camel" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="49">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340973652.jpeg" alt="White Sox Negra" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="49">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">White Sox Negra</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="49" data-name="White Sox Negra" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="50">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340974282.jpeg" alt="Red Sox Negra" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="50">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Red Sox Negra</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="50" data-name="Red Sox Negra" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="51">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340974881.jpeg" alt="Yankees Negra USA" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="51">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Negra USA</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="51" data-name="Yankees Negra USA" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="52">
+          <div class="product-card__img">
+            <img src="images/luxury/productImage-1773340975511.jpeg" alt="Dodgers Negra Los Angeles" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="52">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Dodgers Negra Los Angeles</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="52" data-name="Dodgers Negra Los Angeles" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="53">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773340976044.jpeg" alt="Oakland A's Verde" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="53">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Oakland A's Verde</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="53" data-name="Oakland A's Verde" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="54">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773341278615.jpeg" alt="Charlotte Hornets Gris" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="54">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Charlotte Hornets Gris</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="54" data-name="Charlotte Hornets Gris" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="55">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773341479639.jpeg" alt="Dodgers Roja World Series" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="55">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Dodgers Roja World Series</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="55" data-name="Dodgers Roja World Series" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="56">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773341516982.jpeg" alt="Dodgers Roja Viva Los Dodgers" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="56">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Dodgers Roja Viva Los Dodgers</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="56" data-name="Dodgers Roja Viva Los Dodgers" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="57">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773341863417.jpeg" alt="Angels Negra World Champions" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="57">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Angels Negra World Champions</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="57" data-name="Angels Negra World Champions" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="58">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773342134184.jpeg" alt="Oakland A's World Series" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="58">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Oakland A's World Series</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="58" data-name="Oakland A's World Series" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="59">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773342169731.jpeg" alt="Red Sox Negra Llamas" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="59">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Red Sox Negra Llamas</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="59" data-name="Red Sox Negra Llamas" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="60">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773342213444.jpeg" alt="Dodgers Negra Cupido" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="60">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Dodgers Negra Cupido</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="60" data-name="Dodgers Negra Cupido" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="luxury" data-id="61">
+          <div class="product-card__img">
+            <span class="product-card__badge">Premium</span>
+            <img src="images/luxury/productImage-1773342247565.jpeg" alt="Yankees Crema Rosas" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="61">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">Beisboleras Edicion Especial</p>
+            <h3 class="product-card__name">Yankees Crema Rosas</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$70.000</span>
+              <button class="btn btn--cart" data-id="61" data-name="Yankees Crema Rosas" data-price="70000" data-category="luxury">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== COLECCIÓN REPÚBLICA DE COLOMBIA ===== -->
+        <article class="product-card" data-category="colombia" data-id="15">
+          <div class="product-card__img">
+            <span class="product-card__badge">Popular</span>
+            <img src="images/colombia/productImage-1772728957402.jpeg" alt="República de Colombia Negra" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="15">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Negra Escudo Dorado</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="15" data-name="Colombia Negra Escudo Dorado" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="16">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728960869.jpeg" alt="República de Colombia Blanca" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="16">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Blanca Escudo Dorado</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="16" data-name="Colombia Blanca Escudo Dorado" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="17">
+          <div class="product-card__img">
+            <span class="product-card__badge product-card__badge--new">Nuevo</span>
+            <img src="images/colombia/productImage-1772728963655.jpeg" alt="República de Colombia Verde Militar" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="17">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Verde Militar</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="17" data-name="Colombia Verde Militar" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="18">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728958027.jpeg" alt="República de Colombia Roja" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="18">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Roja Escudo Dorado</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="18" data-name="Colombia Roja Escudo Dorado" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="19">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728958876.jpeg" alt="República de Colombia Edición Especial" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="19">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Edición Especial</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="19" data-name="Colombia Edición Especial" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="20">
+          <div class="product-card__img">
+            <span class="product-card__badge">Popular</span>
+            <img src="images/colombia/productImage-1772728959503.jpeg" alt="República de Colombia Clásica" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="20">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Clásica Bordado Dorado</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="20" data-name="Colombia Clásica Bordado Dorado" data-price="75000" data-category="colombia">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="62">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728960230.jpeg" alt="Colombia Café Escudo" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="62">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Café Escudo</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="62" data-name="Colombia Café Escudo" data-price="75000" data-category="colombia">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="63">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728961593.jpeg" alt="Colombia Blanca Bordada" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="63">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Blanca Bordada</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="63" data-name="Colombia Blanca Bordada" data-price="75000" data-category="colombia">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="64">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728962298.jpeg" alt="Colombia Tricolor Especial" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="64">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Tricolor Especial</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="64" data-name="Colombia Tricolor Especial" data-price="75000" data-category="colombia">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="65">
+          <div class="product-card__img">
+            <img src="images/colombia/productImage-1772728962975.jpeg" alt="Colombia Premium Dorada" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="65">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Premium Dorada</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="65" data-name="Colombia Premium Dorada" data-price="75000" data-category="colombia">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="colombia" data-id="66">
+          <div class="product-card__img">
+            <span class="product-card__badge product-card__badge--new">Nuevo</span>
+            <img src="images/colombia/productImage-1772729260136.jpeg" alt="Colombia Edición Limitada" loading="lazy" />
+            <div class="product-card__overlay">
+              <button class="product-card__quick-add" data-id="66">+ Añadir</button>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__category">República de Colombia</p>
+            <h3 class="product-card__name">Colombia Edición Limitada</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$75.000</span>
+              <button class="btn btn--cart" data-id="66" data-name="Colombia Edición Limitada" data-price="75000" data-category="colombia">Agregar al carrito</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIES ===== -->
+  <section class="section categories" id="categorias">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__tag">Explora</p>
+        <h2 class="section__title">Nuestras Colecciones</h2>
+      </div>
+      <div class="categories__grid">
+
+        <a href="#tienda" class="category-card" data-filter-link="agropecuario">
+          <div class="category-card__img">
+            <img src="images/agropecuario/imageProduct.jpg" alt="Colección 100% Agropecuario 2026" />
+          </div>
+          <div class="category-card__content">
+            <h3>100% Agropecuario</h3>
+            <p>Colección 2026 — Orgullo del campo colombiano</p>
+            <span class="category-card__cta">Ver colección →</span>
+          </div>
+        </a>
+
+        <a href="#tienda" class="category-card" data-filter-link="luxury">
+          <div class="category-card__img">
+            <img src="images/luxury/imageProduct.jpg" alt="Beisboleras Edicion Especial" />
+          </div>
+          <div class="category-card__content">
+            <h3>Beisboleras Edicion Especial</h3>
+            <p>Ediciones limitadas de equipos legendarios</p>
+            <span class="category-card__cta">Ver colección →</span>
+          </div>
+        </a>
+
+        <a href="#tienda" class="category-card" data-filter-link="colombia">
+          <div class="category-card__img">
+            <img src="images/colombia/imageProduct.jpg" alt="República de Colombia" />
+          </div>
+          <div class="category-card__content">
+            <h3>República de Colombia</h3>
+            <p>Escudo nacional — Bordado premium</p>
+            <span class="category-card__cta">Ver colección →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section about" id="nosotros">
+    <div class="container about__inner">
+      <div class="about__visual">
+        <div class="about__img-main">
+          <img src="images/agropecuario/productImage-1772732844082.jpeg" alt="Gorra Agropecuario Negro — detalle" />
+        </div>
+        <div class="about__badge-floating">
+          <strong>+5</strong>
+          <span>años de experiencia</span>
+        </div>
+      </div>
+      <div class="about__content">
+        <p class="section__tag">Nuestra historia</p>
+        <h2 class="section__title">Somos CapStore</h2>
+        <p class="about__text">
+          Nacimos con una misión clara: llevar gorras de calidad premium a todos los colombianos. Lo que comenzó como un proyecto de pasión se convirtió en una de las tiendas de gorras más queridas del país.
+        </p>
+        <p class="about__text">
+          Cada gorra pasa por un riguroso control de calidad. Trabajamos directamente con los mejores fabricantes para garantizar que recibas solo lo mejor — desde la colección Agropecuaria hasta las exclusivas Beisboleras Edicion Especial.
+        </p>
+        <div class="about__features">
+          <div class="about__feature">
+            <div class="about__feature-icon">✦</div>
+            <div>
+              <strong>Materiales Premium</strong>
+              <p>Solo usamos telas y materiales de la más alta calidad.</p>
+            </div>
+          </div>
+          <div class="about__feature">
+            <div class="about__feature-icon">✦</div>
+            <div>
+              <strong>Diseño Exclusivo</strong>
+              <p>Colecciones únicas que representan identidad y cultura colombiana.</p>
+            </div>
+          </div>
+          <div class="about__feature">
+            <div class="about__feature-icon">✦</div>
+            <div>
+              <strong>Envío Rápido</strong>
+              <p>Entrega en 2-5 días hábiles a todo el país.</p>
+            </div>
+          </div>
+        </div>
+        <a href="#tienda" class="btn btn--primary">Explorar tienda</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section contact" id="contacto">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__tag">Contáctanos</p>
+        <h2 class="section__title">¿Tienes alguna pregunta?</h2>
+        <p class="section__subtitle">Estamos aquí para ayudarte. Escríbenos y te responderemos en menos de 24 horas.</p>
+      </div>
+      <div class="contact__grid">
+        <form class="contact__form" id="contactForm">
+          <div class="form__group">
+            <label for="name">Nombre completo</label>
+            <input type="text" id="name" placeholder="Tu nombre" required />
+          </div>
+          <div class="form__group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="tu@email.com" required />
+          </div>
+          <div class="form__group">
+            <label for="message">Mensaje</label>
+            <textarea id="message" rows="5" placeholder="¿En qué podemos ayudarte?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">Enviar mensaje</button>
+          <p class="form__success" id="formSuccess">¡Mensaje enviado! Te contactaremos pronto.</p>
+        </form>
+        <div class="contact__info">
+          <div class="contact__info-card">
+            <div class="contact__info-icon">📍</div>
+            <div>
+              <strong>Dirección</strong>
+              <p>Colombia</p>
+            </div>
+          </div>
+          <div class="contact__info-card">
+            <div class="contact__info-icon">📞</div>
+            <div>
+              <strong>WhatsApp</strong>
+              <p>+57 300 000 0000</p>
+            </div>
+          </div>
+          <div class="contact__info-card">
+            <div class="contact__info-icon">✉️</div>
+            <div>
+              <strong>Email</strong>
+              <p><a href="mailto:thecapstoreonline@gmail.com">thecapstoreonline@gmail.com</a></p>
+            </div>
+          </div>
+          <div class="contact__info-card">
+            <div class="contact__info-icon">🕐</div>
+            <div>
+              <strong>Horario</strong>
+              <p>Lun–Sáb: 8am – 7pm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#" class="logo logo--light">
+          <span class="logo__icon">🧢</span>
+          <span class="logo__text">Cap<span class="logo__accent">Store</span></span>
+        </a>
+        <p>Tu destino número uno para gorras premium. Estilo, calidad y orgullo colombiano en cada pieza.</p>
+        <div class="footer__socials">
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="TikTok">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Twitter/X">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Colecciones</h4>
+        <ul>
+          <li><a href="#tienda">Todos los productos</a></li>
+          <li><a href="#categorias">100% Agropecuario</a></li>
+          <li><a href="#categorias">Beisboleras Edicion Especial</a></li>
+          <li><a href="#categorias">República de Colombia</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ayuda</h4>
+        <ul>
+          <li><a href="#">Guía de tallas</a></li>
+          <li><a href="#">Política de envíos</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Trabaja con nosotros</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>&copy; 2026 CapStore. Todos los derechos reservados.</p>
+        <div class="footer__legal">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CART SIDEBAR ===== -->
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-sidebar__backdrop" id="cartBackdrop"></div>
+    <div class="cart-sidebar__panel">
+      <div class="cart-sidebar__header">
+        <h3>Tu Carrito</h3>
+        <button class="cart-sidebar__close" id="cartClose" aria-label="Cerrar carrito">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="cart-sidebar__body" id="cartBody">
+        <div class="cart-empty" id="cartEmpty">
+          <div class="cart-empty__icon">🛒</div>
+          <p>Tu carrito está vacío</p>
+          <a href="#tienda" class="btn btn--primary" id="cartGoShop">Explorar tienda</a>
+        </div>
+        <ul class="cart-items" id="cartItems"></ul>
+      </div>
+      <div class="cart-sidebar__footer" id="cartFooter">
+        <div class="cart-total">
+          <span>Total:</span>
+          <strong id="cartTotal">$0</strong>
+        </div>
+        <button class="btn btn--primary btn--full">Proceder al pago</button>
+        <button class="btn btn--outline btn--full" id="clearCartBtn">Vaciar carrito</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== LIGHTBOX ZOOM ===== -->
+  <div class="img-zoom" id="imgZoom" role="dialog" aria-modal="true" aria-label="Zoom imagen" style="display:none">
+    <button class="img-zoom__close" id="imgZoomClose" aria-label="Cerrar zoom">✕</button>
+    <img class="img-zoom__img" id="imgZoomImg" src="" alt="" />
+  </div>
+
+  <!-- ===== CHATBOT WIDGET ===== -->
+  <div class="chatbot" id="chatbot">
+    <div class="chatbot__window" id="chatbotWindow" aria-hidden="true">
+      <div class="chatbot__header">
+        <div class="chatbot__header-info">
+          <div class="chatbot__avatar">🧢</div>
+          <div>
+            <p class="chatbot__name">Asistente CapsStore</p>
+            <p class="chatbot__status">● En línea</p>
+          </div>
+        </div>
+        <button class="chatbot__close" id="chatbotClose" aria-label="Cerrar chat">✕</button>
+      </div>
+      <div class="chatbot__messages" id="chatbotMessages" role="log" aria-live="polite"></div>
+      <div class="chatbot__quick-replies" id="chatbotQuickReplies"></div>
+      <div class="chatbot__input-area">
+        <input
+          type="text"
+          class="chatbot__input"
+          id="chatbotInput"
+          placeholder="Escribe un mensaje..."
+          autocomplete="off"
+          maxlength="200"
+        />
+        <button class="chatbot__send" id="chatbotSend" aria-label="Enviar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="chatbot__label" id="chatbotLabel">💬 Haz tu pedido aquí</div>
+    <button class="chatbot__toggle" id="chatbotToggle" aria-label="Abrir asistente">
+      <svg class="chatbot__toggle-icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <svg class="chatbot__toggle-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+      <span class="chatbot__badge" id="chatbotBadge" style="display:none">1</span>
+    </button>
+  </div>
+
+  <!-- Supabase JS (requerido para persistencia del chatbot) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -478,7 +478,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   // Las peticiones van al bot de WhatsApp (Node.js) que corre localmente
   // y usa la misma cuenta Gmail configurada en chatbot/.env
   // ===========================================
-  const NOTIFY_API_URL = 'https://the-cap-store-online-production.up.railway.app/enviar-correo';
+ // Asegúrate de que use HTTPS y termine en /enviar-correo
+  const NOTIFY_API_URL = "https://chatbot-server-capstore-production.up.railway.app/enviar-correo";
   const NOTIFY_API_KEY = 'capsstore2026';   // debe coincidir con API_KEY en chatbot/.env
 
   async function enviarNotificacionEmail(numeroPedido, datosCliente, producto, coleccion, precio) {
@@ -640,28 +641,26 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     if (!db) return;
     if (!datos.nombre) return; // sin datos de contacto, no interesa guardar
 
+    const precio = selectedProduct ? (currentCollection === 'luxury' ? 70000 : 75000) : null;
+
     try {
-      // ⚠️ Asegúrate de que la tabla registro_chat tenga las columnas: ciudad, departamento
       await db.from('registro_chat').insert({
-        // Producto
         referencia:      selectedProduct ? selectedProduct.id   : null,
         nombre_producto: selectedProduct ? selectedProduct.name : null,
         coleccion:       currentCollection  || null,
-        precio:          selectedProduct    ? (currentCollection === 'luxury' ? 70000 : 75000) : null,
-        // Contacto
+        precio,
         nombre:          datos.nombre    || null,
         celular:         datos.celular   || null,
         direccion:       datos.direccion || null,
         ciudad:          datos.ciudad    || null,
         departamento:    datos.depto     || null,
         correo:          (datos.correo && datos.correo !== '—') ? datos.correo : null,
-        // Resultado
-        estado:          estado,
+        estado,
         numero_pedido:   numeroPedido    || null,
         pago:            estado === 'confirmado' ? 'Contra entrega en efectivo' : null,
       });
     } catch (e) {
-      console.warn('CapsStore DB:', e.message);
+      console.warn('CapsStore registro_chat:', e.message);
     }
   }
 
@@ -1092,7 +1091,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
 
     if (/precio|cuanto|vale|cuesta|costa|valor|cuanto sale/.test(t)) {
       return {
-        text: 'Todas nuestras gorras tienen un precio fijo de $65.000 pesos colombianos 🏷️\n\nEl pago es contra entrega en efectivo.',
+        text: 'Nuestros precios por colección 🏷️\n\n🌾 Agropecuario 2026: $75.000 c/u\n🇨🇴 República de Colombia: $75.000 c/u\n💎 New Era Luxury: $70.000 c/u\n\nEl pago es contra entrega en efectivo.',
         qr: ['Ver colecciones', 'Menú principal'],
       };
     }

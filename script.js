@@ -478,15 +478,15 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   // Las peticiones van al bot de WhatsApp (Node.js) que corre localmente
   // y usa la misma cuenta Gmail configurada en chatbot/.env
   // ===========================================
-const NOTIFY_API_URL = "https://the-cap-store-online-production.up.railway.app/enviar-correo";
+  const NOTIFY_API_URL = 'https://the-cap-store-online-production.up.railway.app/enviar-correo';
   const NOTIFY_API_KEY = 'capsstore2026';   // debe coincidir con API_KEY en chatbot/.env
 
   async function enviarNotificacionEmail(numeroPedido, datosCliente, producto, coleccion, precio) {
     try {
-      await fetch(NOTIFY_API_URL + '/api/notify-order', {
+      await fetch(NOTIFY_API_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'X-Api-Key': NOTIFY_API_KEY },
-        body:    JSON.stringify({ numeroPedido, datosCliente, producto, coleccion, precio }),
+        body:    JSON.stringify({ type: 'order', numeroPedido, datosCliente, producto, coleccion, precio }),
       });
     } catch (e) {
       console.warn('Notificación email (API):', e.message);
@@ -495,10 +495,10 @@ const NOTIFY_API_URL = "https://the-cap-store-online-production.up.railway.app/e
 
   async function enviarNotificacionMayoreoEmail(dm) {
     try {
-      await fetch(NOTIFY_API_URL + '/api/notify-mayoreo', {
+      await fetch(NOTIFY_API_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'X-Api-Key': NOTIFY_API_KEY },
-        body:    JSON.stringify({ dm }),
+        body:    JSON.stringify({ type: 'mayoreo', dm }),
       });
     } catch (e) {
       console.warn('Notificación mayoreo (API):', e.message);

@@ -474,48 +474,34 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   }
 
   // ===========================================
-  // CONFIGURACIÓN EMAILJS — notificaciones de pedidos
-  // 1. Crea una cuenta gratuita en https://www.emailjs.com
-  // 2. Conecta tu Gmail (thecapstoreonline@gmail.com) como Email Service
-  // 3. Crea un Email Template con las variables indicadas abajo
-  // 4. Reemplaza los tres valores con los de tu cuenta
+  // NOTIFICACIONES POR CORREO
+  // Las peticiones van al bot de WhatsApp (Node.js) que corre localmente
+  // y usa la misma cuenta Gmail configurada en chatbot/.env
   // ===========================================
-  const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';    // Account → API Keys
-  const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';    // Email Services → Service ID
-  const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';   // Email Templates → Template ID
-
-  if (
-    typeof window !== 'undefined' &&
-    window.emailjs &&
-    EMAILJS_PUBLIC_KEY !== 'TU_PUBLIC_KEY'
-  ) {
-    window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-  }
+const NOTIFY_API_URL = "https://the-cap-store-online-production.up.railway.app/enviar-correo";
+  const NOTIFY_API_KEY = 'capsstore2026';   // debe coincidir con API_KEY en chatbot/.env
 
   async function enviarNotificacionEmail(numeroPedido, datosCliente, producto, coleccion, precio) {
-    if (
-      typeof window === 'undefined' ||
-      !window.emailjs ||
-      EMAILJS_PUBLIC_KEY === 'TU_PUBLIC_KEY'
-    ) return;
     try {
-      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        order_number:   numeroPedido,
-        client_name:    datosCliente.nombre,
-        client_phone:   datosCliente.celular,
-        client_address: datosCliente.direccion,
-        client_city:    datosCliente.ciudad,
-        client_dept:    datosCliente.depto,
-        client_email:   datosCliente.correo !== '—' ? datosCliente.correo : '(no indicado)',
-        product_name:   producto.name,
-        product_ref:    producto.id,
-        collection:     coleccion,
-        total:          precio,
-        payment_method: 'Contra entrega en efectivo',
+      await fetch(NOTIFY_API_URL + '/api/notify-order', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': NOTIFY_API_KEY },
+        body:    JSON.stringify({ numeroPedido, datosCliente, producto, coleccion, precio }),
       });
-      console.log('📧 Notificación de pedido enviada:', numeroPedido);
     } catch (e) {
-      console.warn('EmailJS:', e);
+      console.warn('Notificación email (API):', e.message);
+    }
+  }
+
+  async function enviarNotificacionMayoreoEmail(dm) {
+    try {
+      await fetch(NOTIFY_API_URL + '/api/notify-mayoreo', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': NOTIFY_API_KEY },
+        body:    JSON.stringify({ dm }),
+      });
+    } catch (e) {
+      console.warn('Notificación mayoreo (API):', e.message);
     }
   }
 
@@ -611,7 +597,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   let currentCollection = null;   // clave en CATALOG
   let selectedProduct   = null;   // { id, name }
   let datos             = { nombre: '', direccion: '', ciudad: '', depto: '', celular: '', correo: '' };
-  let procesandoPedido  = false;  // evita confirmaciones duplicadas
+  let datosMayoreo      = { nombre: '', celular: '', cantidad: '', coleccion: '', correo: '' };
+  let procesandoPedido  = false;
 
   function resetSession() {
     state             = 'menu';
@@ -619,6 +606,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     selectedProduct   = null;
     procesandoPedido  = false;
     datos             = { nombre: '', direccion: '', ciudad: '', depto: '', celular: '', correo: '' };
+    datosMayoreo      = { nombre: '', celular: '', cantidad: '', coleccion: '', correo: '' };
   }
 
   // ===========================================
@@ -834,6 +822,99 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     };
   }
 
+  // ── Flujo mayoreo (web) ──────────────────────────────────────────────────
+
+  function handleMayoreoNombre(raw) {
+    if (raw.trim().length < 3) {
+      return { text: 'Por favor escribe tu nombre completo (mínimo 3 caracteres).', qr: ['Cancelar'] };
+    }
+    datosMayoreo.nombre = raw.trim();
+    state = 'mayoreo_celular';
+    return { text: '📱 ¿Cuál es tu número de celular / WhatsApp?\n(Solo dígitos, ej: 3001234567)', qr: ['Cancelar'] };
+  }
+
+  function handleMayoreoCelular(raw) {
+    const digits = raw.replace(/\s/g, '');
+    if (!/^\d{7,15}$/.test(digits)) {
+      return { text: 'El número debe tener entre 7 y 15 dígitos.', qr: ['Cancelar'] };
+    }
+    datosMayoreo.celular = digits;
+    state = 'mayoreo_cantidad';
+    return { text: '📦 ¿Cuántas gorras necesitas?\n(Para pedido al por mayor son más de 6 unidades)', qr: ['Cancelar'] };
+  }
+
+  function handleMayoreoCantidad(raw) {
+    const n = parseInt(raw.replace(/\D/g, ''), 10);
+    if (isNaN(n) || n < 1) {
+      return { text: 'Escribe la cantidad en número, ej: 10', qr: ['Cancelar'] };
+    }
+    if (n <= 6) {
+      return {
+        text: 'Para ' + n + ' gorras aplica el pedido normal con descuento incluido. Puedes elegir una colección desde el menú principal 😊',
+        qr: ['Ver colecciones', 'Menú principal'],
+      };
+    }
+    datosMayoreo.cantidad = n;
+    state = 'mayoreo_coleccion';
+    return {
+      text: '🧢 ¿Qué colección(es) te interesan?\n\n🌾 Agropecuario 2026\n💎 New Era Luxury\n🇨🇴 República de Colombia\n📦 Varias / Todas',
+      qr: ['🌾 Agropecuario', '💎 New Era Luxury', '🇨🇴 Colombia', '📦 Todas'],
+    };
+  }
+
+  function handleMayoreoColeccion(raw) {
+    datosMayoreo.coleccion = raw.trim();
+    state = 'mayoreo_correo';
+    return {
+      text: '📧 ¿Cuál es tu correo electrónico?\n(Escribe "no" si prefieres no darlo)',
+      qr: ['No tengo correo', 'Cancelar'],
+    };
+  }
+
+  function handleMayoreoCorreo(raw) {
+    const t = norm(raw);
+    if (t === 'no' || t === 'no tengo correo' || t === 'no tengo') {
+      datosMayoreo.correo = null;
+    } else if (raw.includes('@') && raw.includes('.')) {
+      datosMayoreo.correo = raw.trim();
+    } else {
+      return { text: 'Escribe un correo válido o escribe "no" para omitirlo.', qr: ['No tengo correo', 'Cancelar'] };
+    }
+    state = 'mayoreo_confirmar';
+    const resumen =
+      '📋 Resumen pedido al por mayor:\n\n' +
+      '👤 Nombre: '     + datosMayoreo.nombre    + '\n' +
+      '📱 Celular: '    + datosMayoreo.celular    + '\n' +
+      '📦 Cantidad: '   + datosMayoreo.cantidad   + ' gorras\n' +
+      '🧢 Colección: '  + datosMayoreo.coleccion  + '\n' +
+      '📧 Correo: '     + (datosMayoreo.correo || '(no indicado)') + '\n\n' +
+      '💳 Pago: Anticipado\n\n' +
+      'Nos contactaremos para coordinar precio y entrega. ¿Confirmamos el registro?';
+    return { text: resumen, qr: ['✅ Sí, confirmar', '❌ No, cancelar'] };
+  }
+
+  function handleMayoreoConfirmar(t) {
+    const afirmativo = /^(si|s|yes|dale|claro|ok|okay|sip|yep|confirmar)/.test(t) || t.includes('confirmar');
+    const negativo   = /^(no|n|nope|nel|cancelar)/.test(t) || t.includes('cancelar');
+
+    if (afirmativo) {
+      const dmSnap = { ...datosMayoreo };
+      enviarNotificacionMayoreoEmail(dmSnap);
+      resetSession();
+      return {
+        text: '✅ ¡Registro recibido! Nos contactaremos al ' + dmSnap.celular + ' para coordinar tu pedido al por mayor.\n\n💳 Recuerda: el pago es anticipado. ¡Gracias! 🧢',
+        qr: ['Ver colecciones', 'Menú principal'],
+      };
+    }
+    if (negativo) {
+      resetSession();
+      return { text: 'Registro cancelado. No hay problema 😊 ¿En qué más te puedo ayudar?', qr: ['Ver colecciones', 'Menú principal'] };
+    }
+    return { text: 'Escribe "sí" para confirmar o "no" para cancelar.', qr: ['✅ Sí, confirmar', '❌ No, cancelar'] };
+  }
+
+  // ── Fin flujo mayoreo ────────────────────────────────────────────────────
+
   function handleDatosCelular(raw) {
     const digits = raw.replace(/\s/g, '');
     if (!/^\d{7,15}$/.test(digits)) {
@@ -957,7 +1038,44 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     if (state === 'datos_correo')    return handleDatosCorreo(raw);
     if (state === 'confirmacion')    return handleConfirmacion(t);
 
+    if (state === 'mayoreo_nombre')   return handleMayoreoNombre(raw);
+    if (state === 'mayoreo_celular')  return handleMayoreoCelular(raw);
+    if (state === 'mayoreo_cantidad') return handleMayoreoCantidad(raw);
+    if (state === 'mayoreo_coleccion')return handleMayoreoColeccion(raw);
+    if (state === 'mayoreo_correo')   return handleMayoreoCorreo(raw);
+    if (state === 'mayoreo_confirmar')return handleMayoreoConfirmar(t);
+
     // ---- Respuestas informativas ----
+
+    if (/descuento|descuentos|precio especial|por mayor|mayoreo|mayorista|varias gorras|pedido grande|reventa|al por mayor/.test(t)) {
+      const estadosMayoreo = ['mayoreo_nombre','mayoreo_celular','mayoreo_cantidad','mayoreo_coleccion','mayoreo_correo','mayoreo_confirmar'];
+      const estadosPedido  = ['datos_nombre','datos_direccion','datos_ciudad','datos_depto','datos_celular','datos_correo','confirmacion'];
+      if (!estadosMayoreo.includes(state) && !estadosPedido.includes(state)) {
+        state = 'mayoreo_intro_web';
+        return {
+          text: '🎁 Descuentos por volumen\n\n' +
+            '✅ Aplican a partir de 3 gorras en el mismo pedido.\n\n' +
+            '📦 Pedido normal: hasta 6 unidades (con descuento)\n' +
+            '🏭 Venta al por mayor: más de 6 gorras\n' +
+            '   • Precio especial negociado\n' +
+            '   • 💳 Pago anticipado\n' +
+            '   • Te contactamos por WhatsApp\n\n' +
+            '¿Te interesa un pedido al por mayor (más de 6 gorras)?',
+          qr: ['✅ Sí, me interesa', '❌ No, gracias'],
+        };
+      }
+    }
+
+    if (state === 'mayoreo_intro_web') {
+      if (/^(si|s|yes|dale|claro|ok|me interesa|confirmar)/.test(t) || t.includes('me interesa') || t.includes('confirmar')) {
+        state = 'mayoreo_nombre';
+        return { text: '📝 Pedido al por mayor\n\n👤 ¿Cuál es tu nombre completo?', qr: ['Cancelar'] };
+      }
+      if (/^(no|n|nope|nel|gracias)/.test(t) || t.includes('gracias')) {
+        state = 'menu';
+        return { text: '¡Entendido! Para pedidos de hasta 6 gorras puedes elegir tu colección 😊', qr: ['Ver colecciones', 'Menú principal'] };
+      }
+    }
 
     if (/colecciones?|catalogo|modelos|que tienen|que gorras|ver otra/.test(t)) {
       state = 'menu';

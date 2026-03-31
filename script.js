@@ -474,6 +474,52 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   }
 
   // ===========================================
+  // CONFIGURACIÓN EMAILJS — notificaciones de pedidos
+  // 1. Crea una cuenta gratuita en https://www.emailjs.com
+  // 2. Conecta tu Gmail (thecapstoreonline@gmail.com) como Email Service
+  // 3. Crea un Email Template con las variables indicadas abajo
+  // 4. Reemplaza los tres valores con los de tu cuenta
+  // ===========================================
+  const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';    // Account → API Keys
+  const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';    // Email Services → Service ID
+  const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';   // Email Templates → Template ID
+
+  if (
+    typeof window !== 'undefined' &&
+    window.emailjs &&
+    EMAILJS_PUBLIC_KEY !== 'TU_PUBLIC_KEY'
+  ) {
+    window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
+  async function enviarNotificacionEmail(numeroPedido, datosCliente, producto, coleccion, precio) {
+    if (
+      typeof window === 'undefined' ||
+      !window.emailjs ||
+      EMAILJS_PUBLIC_KEY === 'TU_PUBLIC_KEY'
+    ) return;
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        order_number:   numeroPedido,
+        client_name:    datosCliente.nombre,
+        client_phone:   datosCliente.celular,
+        client_address: datosCliente.direccion,
+        client_city:    datosCliente.ciudad,
+        client_dept:    datosCliente.depto,
+        client_email:   datosCliente.correo !== '—' ? datosCliente.correo : '(no indicado)',
+        product_name:   producto.name,
+        product_ref:    producto.id,
+        collection:     coleccion,
+        total:          precio,
+        payment_method: 'Contra entrega en efectivo',
+      });
+      console.log('📧 Notificación de pedido enviada:', numeroPedido);
+    } catch (e) {
+      console.warn('EmailJS:', e);
+    }
+  }
+
+  // ===========================================
   // CATÁLOGO — nombres y IDs idénticos a los de la página web
   // ===========================================
   const CATALOG = {
@@ -564,13 +610,15 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   let state             = 'menu';
   let currentCollection = null;   // clave en CATALOG
   let selectedProduct   = null;   // { id, name }
-  let datos             = { nombre: '', direccion: '', celular: '', correo: '' };
+  let datos             = { nombre: '', direccion: '', ciudad: '', depto: '', celular: '', correo: '' };
+  let procesandoPedido  = false;  // evita confirmaciones duplicadas
 
   function resetSession() {
     state             = 'menu';
     currentCollection = null;
     selectedProduct   = null;
-    datos             = { nombre: '', direccion: '', celular: '', correo: '' };
+    procesandoPedido  = false;
+    datos             = { nombre: '', direccion: '', ciudad: '', depto: '', celular: '', correo: '' };
   }
 
   // ===========================================
@@ -605,6 +653,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     if (!datos.nombre) return; // sin datos de contacto, no interesa guardar
 
     try {
+      // ⚠️ Asegúrate de que la tabla registro_chat tenga las columnas: ciudad, departamento
       await db.from('registro_chat').insert({
         // Producto
         referencia:      selectedProduct ? selectedProduct.id   : null,
@@ -615,6 +664,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
         nombre:          datos.nombre    || null,
         celular:         datos.celular   || null,
         direccion:       datos.direccion || null,
+        ciudad:          datos.ciudad    || null,
+        departamento:    datos.depto     || null,
         correo:          (datos.correo && datos.correo !== '—') ? datos.correo : null,
         // Resultado
         estado:          estado,
@@ -742,16 +793,40 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     datos.nombre = raw;
     state = 'datos_direccion';
     return {
-      text: '📍 ¿Cuál es tu dirección de entrega?\n(Incluye ciudad y barrio, ej: Calle 50 #23-10, Medellín)',
+      text: '📍 ¿Cuál es tu dirección de entrega?\n(Calle, número y barrio — ej: Cra 50 #23-10, Kennedy)',
       qr: ['Cancelar pedido'],
     };
   }
 
   function handleDatosDireccion(raw) {
     if (raw.length < 8) {
-      return { text: 'Por favor escribe una dirección más completa (calle, número, ciudad).', qr: ['Cancelar pedido'] };
+      return { text: 'Por favor escribe una dirección más completa (calle, número y barrio).', qr: ['Cancelar pedido'] };
     }
     datos.direccion = raw;
+    state = 'datos_ciudad';
+    return {
+      text: '🏙️ ¿En qué ciudad vives?\n(Solo el nombre de la ciudad)',
+      qr: ['Cancelar pedido'],
+    };
+  }
+
+  function handleDatosCiudad(raw) {
+    if (raw.trim().length < 2) {
+      return { text: 'Por favor escribe el nombre de tu ciudad.', qr: ['Cancelar pedido'] };
+    }
+    datos.ciudad = raw.trim();
+    state = 'datos_depto';
+    return {
+      text: '🗺️ ¿En qué departamento te encuentras?\n(Ej: Antioquia, Valle del Cauca, Bogotá D.C.)',
+      qr: ['Cancelar pedido'],
+    };
+  }
+
+  function handleDatosDepto(raw) {
+    if (raw.trim().length < 3) {
+      return { text: 'Por favor escribe el nombre del departamento.', qr: ['Cancelar pedido'] };
+    }
+    datos.depto = raw.trim();
     state = 'datos_celular';
     return {
       text: '📱 ¿Cuál es tu número de celular / WhatsApp?\n(Solo dígitos, ej: 3001234567)',
@@ -792,10 +867,12 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
       '🔖 Ref: ' + selectedProduct.id + '\n' +
       '💰 Precio: ' + precio + '\n' +
       '💳 Pago: Contra entrega en efectivo\n\n' +
-      '👤 Nombre: '    + datos.nombre    + '\n' +
-      '📍 Dirección: ' + datos.direccion + '\n' +
-      '📱 Celular: '   + datos.celular   + '\n' +
-      '📧 Correo: '    + datos.correo    + '\n\n' +
+      '👤 Nombre: '       + datos.nombre    + '\n' +
+      '📍 Dirección: '    + datos.direccion + '\n' +
+      '🏙️ Ciudad: '      + datos.ciudad    + '\n' +
+      '🗺️ Departamento: ' + datos.depto     + '\n' +
+      '📱 Celular: '      + datos.celular   + '\n' +
+      '📧 Correo: '       + datos.correo    + '\n\n' +
       '¿Confirmas el pedido?';
     return { text: summary, qr: ['✅ Sí, confirmar', '❌ No, cancelar'] };
   }
@@ -805,9 +882,23 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     const negativo   = /^(no|n|nope|nel|cancelar)/.test(t) || t.includes('cancelar');
 
     if (afirmativo) {
-      const numeroPedido    = 'CS-' + Date.now().toString().slice(-6);
+      // Evitar doble confirmación en la misma sesión
+      if (procesandoPedido) {
+        return { text: '⏳ Tu pedido ya está siendo procesado, un momento...', qr: [] };
+      }
+      procesandoPedido = true;
+
+      const numeroPedido    = 'CS-WEB-' + Date.now().toString(36).toUpperCase();
       const celularGuardado = datos.celular;
-      dbGuardarRegistro('confirmado', numeroPedido); // una sola fila
+      const precio          = currentCollection === 'luxury' ? '$70.000' : '$75.000';
+      const datosSnap       = { ...datos };        // copia antes del reset
+      const productoSnap    = { ...selectedProduct };
+      const coleccionSnap   = currentCollection;
+
+      dbGuardarRegistro('confirmado', numeroPedido);
+      // Notificación por correo (fire-and-forget)
+      enviarNotificacionEmail(numeroPedido, datosSnap, productoSnap, coleccionSnap, precio);
+
       resetSession();
       return {
         text: '🎉 ¡Pedido confirmado! Muchas gracias.\n\n' +
@@ -818,7 +909,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     }
 
     if (negativo) {
-      dbGuardarRegistro('cancelado', null); // guarda si hay datos (nombre mínimo)
+      dbGuardarRegistro('cancelado', null);
       resetSession();
       return {
         text: 'Pedido cancelado. No hay problema 😊 ¿En qué más te puedo ayudar?',
@@ -860,6 +951,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
 
     if (state === 'datos_nombre')    return handleDatosNombre(raw);
     if (state === 'datos_direccion') return handleDatosDireccion(raw);
+    if (state === 'datos_ciudad')    return handleDatosCiudad(raw);
+    if (state === 'datos_depto')     return handleDatosDepto(raw);
     if (state === 'datos_celular')   return handleDatosCelular(raw);
     if (state === 'datos_correo')    return handleDatosCorreo(raw);
     if (state === 'confirmacion')    return handleConfirmacion(t);

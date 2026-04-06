@@ -7,23 +7,9 @@
 // =============================================
 // CART STATE
 // =============================================
-let cart = JSON.parse(localStorage.getItem('capstore_cart') || '[]');
-
 // =============================================
 // DOM REFERENCES
 // =============================================
-const cartBtn      = document.getElementById('cartBtn');
-const cartBadge    = document.getElementById('cartBadge');
-const cartSidebar  = document.getElementById('cartSidebar');
-const cartBackdrop = document.getElementById('cartBackdrop');
-const cartClose    = document.getElementById('cartClose');
-const cartBody     = document.getElementById('cartBody');
-const cartItems    = document.getElementById('cartItems');
-const cartEmpty    = document.getElementById('cartEmpty');
-const cartTotal    = document.getElementById('cartTotal');
-const cartFooter   = document.getElementById('cartFooter');
-const clearCartBtn = document.getElementById('clearCartBtn');
-const cartGoShop   = document.getElementById('cartGoShop');
 const hamburger    = document.getElementById('hamburger');
 const nav          = document.getElementById('nav');
 const header       = document.getElementById('header');
@@ -31,7 +17,6 @@ const filterTabs   = document.getElementById('filterTabs');
 const productsGrid = document.getElementById('productsGrid');
 const contactForm  = document.getElementById('contactForm');
 const formSuccess  = document.getElementById('formSuccess');
-const toast        = document.getElementById('toast');
 
 // =============================================
 // HEADER — SCROLL EFFECT
@@ -96,206 +81,6 @@ document.querySelectorAll('[data-filter-link]').forEach(link => {
       if (targetTab) targetTab.click();
     }, 400);
   });
-});
-
-// =============================================
-// CART HELPERS
-// =============================================
-function saveCart() {
-  localStorage.setItem('capstore_cart', JSON.stringify(cart));
-}
-
-function getCartCount() {
-  return cart.reduce((sum, item) => sum + item.qty, 0);
-}
-
-function getCartTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-}
-
-function updateCartBadge() {
-  const count = getCartCount();
-  cartBadge.textContent = count;
-  cartBadge.classList.remove('bump');
-  // Force reflow for re-animation
-  void cartBadge.offsetWidth;
-  if (count > 0) cartBadge.classList.add('bump');
-}
-
-function showToast(msg) {
-  toast.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-// =============================================
-// CART RENDERING
-// =============================================
-function renderCart() {
-  const count = getCartCount();
-  const total = getCartTotal();
-
-  if (count === 0) {
-    cartEmpty.style.display = 'flex';
-    cartItems.style.display = 'none';
-    cartFooter.classList.add('hidden');
-  } else {
-    cartEmpty.style.display = 'none';
-    cartItems.style.display = 'flex';
-    cartFooter.classList.remove('hidden');
-  }
-
-  cartTotal.textContent = `$${total.toLocaleString('es-MX')}`;
-
-  cartItems.innerHTML = '';
-  cart.forEach(item => {
-    const li = document.createElement('li');
-    li.className = 'cart-item';
-    li.dataset.id = item.id;
-    li.innerHTML = `
-      <div class="cart-item__icon">🧢</div>
-      <div class="cart-item__info">
-        <p class="cart-item__name">${item.name}</p>
-        <p class="cart-item__price">$${(item.price * item.qty).toLocaleString('es-MX')}</p>
-      </div>
-      <div class="cart-item__controls">
-        <div class="cart-item__qty">
-          <button class="cart-item__qty-btn" data-action="dec" data-id="${item.id}" aria-label="Reducir cantidad">−</button>
-          <span class="cart-item__qty-num">${item.qty}</span>
-          <button class="cart-item__qty-btn" data-action="inc" data-id="${item.id}" aria-label="Aumentar cantidad">+</button>
-        </div>
-        <button class="cart-item__remove" data-id="${item.id}" aria-label="Eliminar producto">✕</button>
-      </div>
-    `;
-    cartItems.appendChild(li);
-  });
-}
-
-// =============================================
-// CART ACTIONS
-// =============================================
-function addToCart(id, name, price, category) {
-  const numId    = Number(id);
-  const numPrice = Number(price);
-  const existing = cart.find(i => i.id === numId);
-
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ id: numId, name, price: numPrice, category, qty: 1 });
-  }
-
-  saveCart();
-  updateCartBadge();
-  renderCart();
-  showToast(`🧢 "${name}" añadido al carrito`);
-}
-
-function removeFromCart(id) {
-  const numId = Number(id);
-  cart = cart.filter(i => i.id !== numId);
-  saveCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function changeQty(id, delta) {
-  const numId = Number(id);
-  const item  = cart.find(i => i.id === numId);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) removeFromCart(id);
-  else {
-    saveCart();
-    updateCartBadge();
-    renderCart();
-  }
-}
-
-function clearCart() {
-  cart = [];
-  saveCart();
-  updateCartBadge();
-  renderCart();
-  showToast('Carrito vaciado');
-}
-
-// =============================================
-// CART EVENT DELEGATION
-// =============================================
-cartItems.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-action], .cart-item__remove');
-  if (!btn) return;
-
-  const id = btn.dataset.id;
-
-  if (btn.classList.contains('cart-item__remove')) {
-    removeFromCart(id);
-  } else if (btn.dataset.action === 'inc') {
-    changeQty(id, 1);
-  } else if (btn.dataset.action === 'dec') {
-    changeQty(id, -1);
-  }
-});
-
-clearCartBtn.addEventListener('click', clearCart);
-
-// =============================================
-// "AGREGAR AL CARRITO" BUTTONS
-// =============================================
-productsGrid.addEventListener('click', (e) => {
-  // Main cart button
-  const cartBtnEl = e.target.closest('.btn--cart');
-  if (cartBtnEl) {
-    const { id, name, price, category } = cartBtnEl.dataset;
-    addToCart(id, name, price, category);
-    openCart();
-    return;
-  }
-
-  // Quick add overlay button
-  const quickAdd = e.target.closest('.product-card__quick-add');
-  if (quickAdd) {
-    const card     = quickAdd.closest('.product-card');
-    const mainBtn  = card.querySelector('.btn--cart');
-    if (mainBtn) {
-      const { id, name, price, category } = mainBtn.dataset;
-      addToCart(id, name, price, category);
-    }
-  }
-});
-
-// =============================================
-// CART SIDEBAR OPEN / CLOSE
-// =============================================
-function openCart() {
-  cartSidebar.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCart() {
-  cartSidebar.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-cartBtn.addEventListener('click', openCart);
-cartClose.addEventListener('click', closeCart);
-cartBackdrop.addEventListener('click', closeCart);
-
-cartGoShop?.addEventListener('click', () => {
-  closeCart();
-});
-
-// Close cart on Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (cartSidebar.classList.contains('open')) closeCart();
-    if (nav.classList.contains('open')) {
-      hamburger.classList.remove('open');
-      nav.classList.remove('open');
-    }
-  }
 });
 
 // =============================================
@@ -384,8 +169,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 // INIT
 // =============================================
 function init() {
-  updateCartBadge();
-  renderCart();
   console.log('%c🧢 CapStore JS loaded', 'color: #f5a623; font-weight: bold; font-size: 14px;');
 }
 

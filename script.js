@@ -448,8 +448,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   // ===========================================
 
   // Guarda un registro solo si el usuario proporcionó al menos su nombre.
-  // estado: 'confirmado' | 'pendiente' (falta el correo, opcional) | 'cancelado'
-  // numeroPedido: string (confirmado/pendiente) | null (cancelado)
+  // estado: 'confirmado' | 'cancelado'
+  // numeroPedido: string (solo confirmados) | null
   async function dbGuardarRegistro(estado, numeroPedido) {
     if (!db) return;
     if (!datos.nombre) return; // sin datos de contacto, no interesa guardar
@@ -789,12 +789,12 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
       const productoSnap    = { ...selectedProduct };
       const coleccionSnap   = currentCollection;
 
-      // 'correo' es el unico dato opcional del flujo (el cliente puede omitirlo,
-      // linea 747: datos.correo = '-'); si falta, el pedido queda 'pendiente'
-      // hasta que el negocio lo complete a mano. El resto de campos siempre
-      // estan presentes por el propio flujo de captura de datos.
-      const estadoPedido = (datos.correo && datos.correo !== '—') ? 'confirmado' : 'pendiente';
-      dbGuardarRegistro(estadoPedido, numeroPedido);
+      // Nombre, direccion, ciudad, departamento y celular son obligatorios por
+      // el propio flujo de captura de datos (siempre estan presentes aqui) y
+      // son suficientes para confirmar el pedido. 'correo' es opcional (linea
+      // 747: datos.correo = '-' si se omite): agrega valor como canal de
+      // contacto extra, pero no bloquea que el pedido pase a confirmado.
+      dbGuardarRegistro('confirmado', numeroPedido);
       // Notificación por correo (fire-and-forget)
       enviarNotificacionEmail(numeroPedido, datosSnap, productoSnap, coleccionSnap, precio);
 

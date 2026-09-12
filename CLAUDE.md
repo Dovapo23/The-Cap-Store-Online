@@ -303,6 +303,25 @@ en producción (repo `chatbot-server-CapStore`, commits `ab1cecd`, `86902f6`,
   con `optimize_images.py` (14.73 MB → 7.41 MB) y se limpiaron del proyecto
   `PLAN_MIGRACION_SUPABASE_TWILIO.md` (obsoleto, ya superado) y
   `chatbot/data/customers.json` (vestigio de antes de Supabase). Se creó
-  también [GUIA_IMPLEMENTACION_WHATSAPP_SUPABASE_RAILWAY.md](GUIA_IMPLEMENTACION_WHATSAPP_SUPABASE_RAILWAY.md)
-  con el paso a paso completo, pensado como plantilla para el próximo
-  proyecto (tienda de loción).
+  una guía con el paso a paso completo, pensada como plantilla para el
+  próximo proyecto (tienda de loción) — ver nota más abajo, luego
+  reemplazada/ampliada el 2026-09-12.
+
+### Documentación del stack completo (sesión 2026-09-12)
+
+Se reemplazó `GUIA_IMPLEMENTACION_WHATSAPP_SUPABASE_RAILWAY.md` (checklist
+parcial, solo BD+hosting+WhatsApp) por dos documentos hermanos que cubren
+el stack completo (GitHub, Supabase, Railway, Meta WhatsApp Cloud API,
+Resend), con bitácora real de errores/soluciones y tabla de costos/límites
+gratuitos:
+
+- [Guia_Stack_Tecnico_CapStore.pdf](Guia_Stack_Tecnico_CapStore.pdf) — versión
+  para lectura humana (portada, índice, formato).
+- [GUIA_MAESTRA_STACK_TECNICO.md](GUIA_MAESTRA_STACK_TECNICO.md) — mismo
+  contenido en texto plano, pensado para que otro modelo de IA (Codex, otra
+  sesión de Claude) lo consuma barato en tokens sin parsear el PDF. Si el
+  contenido diverge entre ambos, actualizar primero el `.md` y regenerar el
+  PDF a partir de él.
+
+Ninguno de los dos incluye credenciales reales — todo valor de ejemplo es
+un placeholder.

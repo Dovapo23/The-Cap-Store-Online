@@ -28,24 +28,25 @@ window.addEventListener('scroll', () => {
 // =============================================
 // MOBILE MENU
 // =============================================
+function setNavOpen(open) {
+  hamburger.classList.toggle('open', open);
+  nav.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', String(open));
+}
+
 hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  nav.classList.toggle('open');
+  setNavOpen(!nav.classList.contains('open'));
 });
 
 // Close nav on link click
 nav.querySelectorAll('.nav__link').forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    nav.classList.remove('open');
-  });
+  link.addEventListener('click', () => setNavOpen(false));
 });
 
 // Close nav on outside click
 document.addEventListener('click', (e) => {
   if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
-    hamburger.classList.remove('open');
-    nav.classList.remove('open');
+    setNavOpen(false);
   }
 });
 
@@ -87,19 +88,37 @@ document.querySelectorAll('[data-filter-link]').forEach(link => {
 // CONTACT FORM
 // =============================================
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  const CONTACT_API_URL = 'https://chatbot-server-capstore-production.up.railway.app/enviar-correo';
+  const CONTACT_API_KEY = '755bd8270e14e4469029c3da0f0d2973cf48a7c00e59d2bc'; // debe coincidir con API_KEY en chatbot/.env
+
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('[type="submit"]');
+    const nombre  = document.getElementById('name').value.trim();
+    const correo  = document.getElementById('email').value.trim();
+    const mensaje = document.getElementById('message').value.trim();
+
     submitBtn.textContent = 'Enviando...';
     submitBtn.disabled = true;
 
-    setTimeout(() => {
+    try {
+      const res = await fetch(CONTACT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': CONTACT_API_KEY },
+        body: JSON.stringify({ type: 'contact', nombre, correo, mensaje }),
+      });
+      if (!res.ok) throw new Error('respuesta no OK');
+      formSuccess.textContent = '¡Mensaje enviado! Te contactaremos pronto.';
+    } catch (err) {
+      console.warn('Contacto (API):', err.message);
+      formSuccess.textContent = 'No pudimos enviar el mensaje. Escríbenos por WhatsApp o al correo directamente.';
+    } finally {
       formSuccess.classList.add('visible');
       contactForm.reset();
       submitBtn.textContent = 'Enviar mensaje';
       submitBtn.disabled = false;
-      setTimeout(() => formSuccess.classList.remove('visible'), 5000);
-    }, 1200);
+      setTimeout(() => formSuccess.classList.remove('visible'), 6000);
+    }
   });
 }
 
@@ -186,12 +205,15 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   const overlay  = document.getElementById('imgZoom');
   const zoomImg  = document.getElementById('imgZoomImg');
   const closeBtn = document.getElementById('imgZoomClose');
+  let lastFocused = null;
 
   function openZoom(src, alt) {
+    lastFocused = document.activeElement;
     zoomImg.src = src;
     zoomImg.alt = alt || '';
     overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    closeBtn.focus();
   }
 
   // Añadir botón lupa a cada tarjeta de producto
@@ -222,6 +244,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     overlay.style.display = 'none';
     document.body.style.overflow = '';
     zoomImg.src = '';
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    lastFocused = null;
   }
 
   closeBtn.addEventListener('click', closeZoom);
@@ -229,7 +253,13 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
     if (e.target === overlay) closeZoom();
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.style.display !== 'none') closeZoom();
+    if (overlay.style.display === 'none') return;
+    if (e.key === 'Escape') closeZoom();
+    // Único elemento enfocable dentro del diálogo: Tab siempre se queda en el botón de cerrar.
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      closeBtn.focus();
+    }
   });
 }());
 
@@ -263,7 +293,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   // ===========================================
  // Asegúrate de que use HTTPS y termine en /enviar-correo
   const NOTIFY_API_URL = "https://chatbot-server-capstore-production.up.railway.app/enviar-correo";
-  const NOTIFY_API_KEY = 'capsstore2026';   // debe coincidir con API_KEY en chatbot/.env
+  const NOTIFY_API_KEY = '755bd8270e14e4469029c3da0f0d2973cf48a7c00e59d2bc';   // debe coincidir con API_KEY en chatbot/.env
 
   async function enviarNotificacionEmail(numeroPedido, datosCliente, producto, coleccion, precio) {
     try {
@@ -441,6 +471,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
         estado,
         numero_pedido:   numeroPedido    || null,
         pago:            estado === 'confirmado' ? 'Contra entrega en efectivo' : null,
+        canal:           'web',
       });
     } catch (e) {
       console.warn('CapsStore registro_chat:', e.message);

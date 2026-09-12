@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dovapo23.github.io/The-Cap-Store-Online/sitemap.xml

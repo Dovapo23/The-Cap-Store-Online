@@ -131,6 +131,15 @@ ciudadCandidatos: null | array  // candidatos cuando `findCity` es ambiguo
 - `saveOrder(order)` (`chatbot/db.js`) inserta **una fila por producto del carrito**, todas con el mismo `numero_pedido` — `registro_chat` está diseñada como "un evento de compra por fila", no una fila por pedido completo (ver comentario en `db/schema.sql`).
 - `isDuplicateOrder(telefono, cart)` consulta Supabase (celular + últimos 10 min), ya no lee un JSON local.
 - Antes de esta migración, `numero_pedido` era `UNIQUE` en el esquema original — se quitó en `db/migration_001_canal_unificado.sql` precisamente para permitir varias filas por pedido.
+- **Regla de `estado` (fijada 2026-09-12, ver sesión más abajo):** un pedido queda
+  `'confirmado'` (y por tanto visible en la vista `pedidos_confirmados` y dispara el
+  correo a `thecapstoreonline@gmail.com`) en cuanto el cliente completa nombre,
+  teléfono, dirección, ciudad y departamento — los únicos datos obligatorios en
+  ambos flujos (bot y web). El `correo` del cliente es **opcional** y no condiciona
+  el estado ni el envío del correo de notificación; solo agrega un canal de
+  contacto extra. `chatbot/index.js` y `script.js` ponen `estado: 'confirmado'`
+  de forma fija al cerrar el pedido; `'pendiente'` sigue siendo un valor válido en
+  el `CHECK` de la tabla pero hoy ningún flujo lo genera.
 
 ### Para agregar un producto nuevo
 1. Agregar la imagen en `images/<coleccion>/` (la carpeta de la raíz del proyecto, no `chatbot/images/` directamente)
@@ -325,3 +334,24 @@ gratuitos:
 
 Ninguno de los dos incluye credenciales reales — todo valor de ejemplo es
 un placeholder.
+
+### Bug real: los pedidos de WhatsApp nunca llegaban a "confirmados" (sesión 2026-09-12)
+
+Al documentar la guía anterior se encontró que `chatbot/index.js` guardaba
+**todo** pedido de WhatsApp con `estado: 'pendiente'` fijo (arrastrado desde la
+migración a Meta Cloud API), mientras que `pedidos_confirmados` (la vista de
+gestión en Supabase) filtra `WHERE estado = 'confirmado'`. Resultado: ningún
+pedido del bot aparecía nunca en esa vista, solo los del sitio web.
+
+Se evaluó primero condicionar `estado` a si el cliente daba su correo (dato
+opcional en ambos flujos), pero se descartó: el `correo` es un canal de
+contacto extra, no un requisito para despachar el pedido (que ya tiene
+nombre/teléfono/dirección/ciudad/depto, siempre obligatorios). Se fijó
+`estado: 'confirmado'` en ambos canales — ver la regla completa en
+"Persistencia de pedidos" más arriba. Se ajustó también `script.js` para que
+el campo `pago` no dependa del estado (siempre `'Contra entrega en efectivo'`,
+único método para pedidos individuales, igual que ya hacía el bot).
+
+Verificado con un pedido real por WhatsApp tras el fix: quedó `confirmado` en
+`registro_chat` y el correo de notificación llegó a
+`thecapstoreonline@gmail.com`.

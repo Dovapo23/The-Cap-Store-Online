@@ -109,3 +109,11 @@ SELECT
 FROM registro_chat
 WHERE estado = 'confirmado'
 ORDER BY fecha DESC;
+
+-- Sin esto, la vista corre con los permisos de su dueño (postgres) y expone
+-- todos los pedidos confirmados (nombre, celular, direccion...) a cualquiera
+-- con la clave publica anon, sin importar el RLS de registro_chat.
+-- Confirmado con una prueba real el 2026-09-12: la clave anon podia leer la
+-- vista completa hasta aplicar esto.
+ALTER VIEW pedidos_confirmados SET (security_invoker = true);
+REVOKE ALL ON pedidos_confirmados FROM anon, authenticated;

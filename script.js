@@ -448,8 +448,8 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
   // ===========================================
 
   // Guarda un registro solo si el usuario proporcionó al menos su nombre.
-  // estado: 'confirmado' | 'cancelado'
-  // numeroPedido: string (solo confirmados) | null
+  // estado: 'confirmado' | 'pendiente' (falta el correo, opcional) | 'cancelado'
+  // numeroPedido: string (confirmado/pendiente) | null (cancelado)
   async function dbGuardarRegistro(estado, numeroPedido) {
     if (!db) return;
     if (!datos.nombre) return; // sin datos de contacto, no interesa guardar
@@ -470,7 +470,7 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
         correo:          (datos.correo && datos.correo !== '—') ? datos.correo : null,
         estado,
         numero_pedido:   numeroPedido    || null,
-        pago:            estado === 'confirmado' ? 'Contra entrega en efectivo' : null,
+        pago:            'Contra entrega en efectivo', // unico metodo para pedidos individuales (igual que el bot de WhatsApp)
         canal:           'web',
       });
     } catch (e) {
@@ -789,7 +789,12 @@ document.getElementById('heroChatBtn').addEventListener('click', function () {
       const productoSnap    = { ...selectedProduct };
       const coleccionSnap   = currentCollection;
 
-      dbGuardarRegistro('confirmado', numeroPedido);
+      // 'correo' es el unico dato opcional del flujo (el cliente puede omitirlo,
+      // linea 747: datos.correo = '-'); si falta, el pedido queda 'pendiente'
+      // hasta que el negocio lo complete a mano. El resto de campos siempre
+      // estan presentes por el propio flujo de captura de datos.
+      const estadoPedido = (datos.correo && datos.correo !== '—') ? 'confirmado' : 'pendiente';
+      dbGuardarRegistro(estadoPedido, numeroPedido);
       // Notificación por correo (fire-and-forget)
       enviarNotificacionEmail(numeroPedido, datosSnap, productoSnap, coleccionSnap, precio);
 
